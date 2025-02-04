@@ -69,7 +69,7 @@ export default function Navbar() {
             transition={{ type: 'spring', stiffness: 300 }}
           />
           <span className="text-xl font-bold text-gray-900 drop-shadow-md">
-            HealthConnect
+            Medicare+
           </span>
         </Link>
 

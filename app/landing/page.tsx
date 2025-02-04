@@ -16,13 +16,13 @@ import {
   HeartPulse, 
   Check, 
   Shield, 
-  
+  Chart, 
   Calendar,
   Activity,
   Clipboard
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
-import LandingSection from '@/components/LandingSection';
+
 export default function LandingPage() {
   const [showOptions, setShowOptions] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -50,7 +50,7 @@ export default function LandingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-6xl pb-3  md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               Modern Healthcare Management
             </h1>
             <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
@@ -86,7 +86,7 @@ export default function LandingPage() {
                         transition={{ delay: 0.1 }}
                       >
                         <Link
-                          href="/auth/hospital/register"
+                          href="/register-hospital"
                           className="flex items-center gap-3 px-6 py-4 bg-white border-2 border-blue-100 rounded-xl hover:border-blue-200 hover:shadow-lg transition-all"
                         >
                           <Building2 className="w-6 h-6 text-blue-600" />
@@ -101,7 +101,7 @@ export default function LandingPage() {
                         transition={{ delay: 0.2 }}
                       >
                         <Link
-                          href="/auth/patient/login"
+                          href="/patient-login"
                           className="flex items-center gap-3 px-6 py-4 bg-white border-2 border-blue-100 rounded-xl hover:border-blue-200 hover:shadow-lg transition-all"
                         >
                           <User className="w-6 h-6 text-purple-600" />
@@ -144,7 +144,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="py-20 px-4 bg-gradient-to-b from-blue-50 to-purple-50">
+   
+<section className="py-20 px-4 bg-white">
   <div className="container mx-auto max-w-7xl">
     <motion.div 
       className="text-center mb-16"
@@ -163,7 +164,7 @@ export default function LandingPage() {
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 auto-rows-[minmax(300px,auto)]">
       {/* Main Feature Card (Large) */}
       <motion.div
-        className="md:col-span-2 md:row-span-2 relative group p-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl text-white overflow-hidden shadow-xl"
+        className="md:col-span-2 md:row-span-2 relative group p-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl text-white overflow-hidden"
         whileHover={{ scale: 1.02 }}
       >
         <div className="relative z-10">
@@ -198,7 +199,7 @@ export default function LandingPage() {
 
       {/* Vertical Card */}
       <motion.div
-        className="md:row-span-2 bg-white rounded-2xl border-2 border-gray-100 p-8 hover:border-blue-200 hover:shadow-lg transition-all shadow-sm"
+        className="md:row-span-2 bg-white rounded-2xl border border-gray-200 p-8 hover:border-blue-200 hover:shadow-md transition-all"
         whileHover={{ y: -5 }}
       >
         <div className="h-full flex flex-col">
@@ -210,13 +211,13 @@ export default function LandingPage() {
             Secure, interoperable EHR system with patient-controlled access
           </p>
           <div className="space-y-4">
-            <div className="flex items-center gap-3 p-4 bg-blue-50 rounded-lg">
-              <Shield className="w-6 h-6 text-blue-600" />
-              <span className="text-blue-600">HIPAA Compliant</span>
+            <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
+              <Shield className="w-6 h-6 text-green-600" />
+              <span>HIPAA Compliant</span>
             </div>
-            <div className="flex items-center gap-3 p-4 bg-purple-50 rounded-lg">
+            <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
               <User className="w-6 h-6 text-purple-600" />
-              <span className="text-purple-600">Patient Portal Integration</span>
+              <span>Patient Portal Integration</span>
             </div>
           </div>
         </div>
@@ -224,7 +225,7 @@ export default function LandingPage() {
 
       {/* Wide Card */}
       <motion.div
-        className="md:col-span-2 bg-white rounded-2xl border-2 border-gray-100 p-8 hover:border-blue-200 hover:shadow-lg transition-all shadow-sm"
+        className="md:col-span-2 bg-white rounded-2xl border border-gray-200 p-8 hover:border-blue-200 hover:shadow-md transition-all"
         whileHover={{ y: -5 }}
       >
         <div className="flex flex-col md:flex-row gap-8">
@@ -239,11 +240,11 @@ export default function LandingPage() {
           </div>
           <div className="flex-1 bg-gradient-to-br from-purple-50 to-blue-50 rounded-lg p-6">
             <div className="space-y-4">
-              <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-100">
+              <div className="p-4 bg-white rounded-lg shadow-sm">
                 <h4 className="font-semibold mb-2">Video Consultations</h4>
                 <p className="text-sm text-gray-600">Secure HD video conferencing</p>
               </div>
-              <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-100">
+              <div className="p-4 bg-white rounded-lg shadow-sm">
                 <h4 className="font-semibold mb-2">AI Diagnostics</h4>
                 <p className="text-sm text-gray-600">Symptom analysis and triage</p>
               </div>
@@ -273,17 +274,10 @@ export default function LandingPage() {
         description="AI-powered staff and resource allocation"
         color="green"
       />
-
-      {/* New Feature Card */}
-      <FeatureCard
-        icon={<HeartPulse className="w-8 h-8" />}
-        title="Patient Monitoring"
-        description="24/7 remote patient monitoring with real-time alerts"
-        color="purple"
-      />
     </div>
   </div>
 </section>
+
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-blue-50 to-purple-50">
@@ -318,7 +312,6 @@ export default function LandingPage() {
             </div>
           </motion.div>
         </div>
-        {/* <LandingSection /> */}
       </section>
     </div>
   );
@@ -346,40 +339,22 @@ const StatCard = ({ icon, value, label }: {
   </motion.div>
 );
 
-
-// Updated FeatureCard component with enhanced contrast
+// Updated FeatureCard component
 const FeatureCard = ({ icon, title, description, color = 'blue' }: { 
   icon: React.ReactNode;
   title: string;
   description: string;
-  color?: 'blue' | 'green' | 'red' | 'purple';
+  color?: 'blue' | 'green' | 'red';
 }) => {
   const colors = {
-    blue: { 
-      bg: 'bg-blue-50', 
-      text: 'text-blue-600',
-      border: 'border-blue-200'
-    },
-    green: { 
-      bg: 'bg-green-50', 
-      text: 'text-green-600',
-      border: 'border-green-200'
-    },
-    red: { 
-      bg: 'bg-red-50', 
-      text: 'text-red-600',
-      border: 'border-red-200'
-    },
-    purple: { 
-      bg: 'bg-purple-50', 
-      text: 'text-purple-600',
-      border: 'border-purple-200'
-    }
+    blue: { bg: 'bg-blue-50', text: 'text-blue-600' },
+    green: { bg: 'bg-green-50', text: 'text-green-600' },
+    red: { bg: 'bg-red-50', text: 'text-red-600' }
   };
 
   return (
     <motion.div
-      className={`group bg-white rounded-xl border-2 ${colors[color].border} hover:border-blue-300 hover:shadow-lg transition-all p-8 shadow-sm`}
+      className="group bg-white rounded-xl border border-gray-200 hover:border-blue-200 hover:shadow-md transition-all p-8"
       whileHover={{ y: -5 }}
     >
       <div className={`mb-6 p-3 w-fit rounded-lg ${colors[color].bg} ${colors[color].text}`}>

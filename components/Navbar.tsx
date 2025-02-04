@@ -10,6 +10,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isFeaturesOpen, setIsFeaturesOpen] = useState(false);
   const [showGetStartedOptions, setShowGetStartedOptions] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const links = [
@@ -29,184 +30,226 @@ export default function Navbar() {
   ];
 
   useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setShowGetStartedOptions(false);
       }
     };
 
+    window.addEventListener('scroll', handleScroll);
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   return (
     <motion.nav 
-      className="fixed w-full top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100"
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
+      className={`fixed top-4 inset-x-0 mx-auto z-50 max-w-5xl px-4 sm:px-6 lg:px-8 rounded-xl backdrop-blur-md transition-all border-[0.5px] border-blue-950 ${
+        isScrolled 
+          ? 'bg-white/95 shadow-lg'
+          : 'bg-white/90'
+      }`}
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, type: 'spring' }}
     >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full" />
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              HealthConnect
-            </span>
-          </Link>
+      <div className="flex items-center justify-between h-16 lg:h-20">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2">
+          <motion.div 
+            className="w-8 h-8 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full shadow-lg"
+            whileHover={{ rotate: 15, scale: 1.1 }}
+            transition={{ type: 'spring', stiffness: 300 }}
+          />
+          <span className="text-xl font-bold text-gray-900 drop-shadow-md">
+            HealthConnect
+          </span>
+        </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-8">
-            <div className="flex items-center gap-6">
-              {links.map((link) => (
-                <div 
-                  key={link.name}
-                  className="relative group"
-                  onMouseEnter={() => link.subLinks && setIsFeaturesOpen(true)}
-                  onMouseLeave={() => link.subLinks && setIsFeaturesOpen(false)}
+        {/* Desktop Navigation */}
+        <div className="hidden lg:flex items-center gap-8">
+          <div className="flex items-center gap-6">
+            {links.map((link) => (
+              <div 
+                key={link.name}
+                className="relative group"
+                onMouseEnter={() => link.subLinks && setIsFeaturesOpen(true)}
+                onMouseLeave={() => link.subLinks && setIsFeaturesOpen(false)}
+              >
+                <Link 
+                  href={link.href}
+                  className="flex items-center gap-1 text-gray-900/90 hover:text-blue-600 transition-colors drop-shadow-md"
                 >
-                  <Link 
-                    href={link.href}
-                    className="flex items-center gap-1 text-gray-600 hover:text-blue-600 transition-colors"
+                  <motion.span
+                    whileHover={{ scale: 1.05 }}
+                    className="relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-blue-600 hover:after:w-full after:transition-all"
                   >
                     {link.name}
-                    {link.subLinks && <ChevronDown className="w-4 h-4" />}
-                  </Link>
-
+                  </motion.span>
                   {link.subLinks && (
-                    <AnimatePresence>
-                      {isFeaturesOpen && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 20 }}
-                          className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100"
-                        >
-                          <div className="p-2 space-y-2">
-                            {link.subLinks.map((subLink) => (
-                              <Link
-                                key={subLink.name}
-                                href={subLink.href}
-                                className="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-md transition-colors"
+                    <ChevronDown className="w-4 h-4 text-gray-900/80 transition-transform group-hover:rotate-180" />
+                  )}
+                </Link>
+
+                {link.subLinks && (
+                  <AnimatePresence>
+                    {isFeaturesOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        className="absolute top-full left-0 mt-2 w-48 bg-white/90 backdrop-blur-sm rounded-lg shadow-xl border-[0.5px] border-blue-950"
+                      >
+                        <div className="p-2 space-y-2">
+                          {link.subLinks.map((subLink) => (
+                            <Link
+                              key={subLink.name}
+                              href={subLink.href}
+                              className="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-md transition-colors"
+                            >
+                              <motion.span
+                                whileHover={{ x: 5 }}
+                                className="flex items-center gap-2"
                               >
+                                <ArrowRight className="w-4 h-4 text-cyan-500" />
                                 {subLink.name}
-                              </Link>
-                            ))}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            <div className="flex items-center gap-4 ml-6" ref={dropdownRef}>
-              <div className="relative">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  onClick={() => setShowGetStartedOptions(!showGetStartedOptions)}
-                  className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-semibold hover:shadow-lg transition-all flex items-center gap-2"
-                >
-                  Get Started
-                  <ChevronDown className={`w-4 h-4 transition-transform ${showGetStartedOptions ? 'rotate-180' : ''}`} />
-                </motion.button>
-
-                <AnimatePresence>
-                  {showGetStartedOptions && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      className="absolute top-full right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-100"
-                    >
-                      <div className="p-2 space-y-2">
-                        <Link
-                          href="/auth/hospital/register"
-                          className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-md transition-colors"
-                          onClick={() => setShowGetStartedOptions(false)}
-                        >
-                          <Building2 className="w-5 h-5 text-purple-600" />
-                          <span>Register Hospital</span>
-                        </Link>
-                        <Link
-                          href="/auth/patient/login"
-                          className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-md transition-colors"
-                          onClick={() => setShowGetStartedOptions(false)}
-                        >
-                          <User className="w-5 h-5 text-blue-600" />
-                          <span>Patient Login</span>
-                        </Link>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                              </motion.span>
+                            </Link>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                )}
               </div>
-            </div>
+            ))}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button 
-            onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden p-2 text-gray-500 hover:text-blue-600 rounded-lg"
-          >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          <div className="flex items-center gap-4 ml-6" ref={dropdownRef}>
+            <div className="relative">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setShowGetStartedOptions(!showGetStartedOptions)}
+                className="px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-full font-semibold hover:shadow-lg transition-all flex items-center gap-2 shadow-lg hover:shadow-blue-400/30"
+              >
+                Get Started
+                <ChevronDown className={`w-4 h-4 transition-transform ${showGetStartedOptions ? 'rotate-180' : ''}`} />
+              </motion.button>
+
+              <AnimatePresence>
+                {showGetStartedOptions && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    className="absolute top-full right-0 mt-2 w-64 bg-white/90 backdrop-blur-sm rounded-lg shadow-xl border-[0.5px] border-blue-950"
+                  >
+                    <div className="p-2 space-y-2">
+                      <Link
+                        href="/auth/hospital/register"
+                        className="flex items-center gap-3 px-4 py-3 text-gray-800 hover:bg-gray-100 rounded-md transition-colors"
+                        onClick={() => setShowGetStartedOptions(false)}
+                      >
+                        <Building2 className="w-5 h-5 text-cyan-500" />
+                        <span>Register Hospital</span>
+                      </Link>
+                      <Link
+                        href="/auth/patient/login"
+                        className="flex items-center gap-3 px-4 py-3 text-gray-800 hover:bg-gray-100 rounded-md transition-colors"
+                        onClick={() => setShowGetStartedOptions(false)}
+                      >
+                        <User className="w-5 h-5 text-blue-600" />
+                        <span>Patient Login</span>
+                      </Link>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
         </div>
 
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden overflow-hidden"
-            >
-              <div className="pt-4 pb-6 space-y-4">
-                {links.map((link) => (
-                  <div key={link.name} className="px-4">
-                    <Link
-                      href={link.href}
-                      className="block py-2 text-gray-600 hover:text-blue-600"
-                      onClick={() => setIsOpen(false)}
+        {/* Mobile Menu Button */}
+        <motion.button 
+          onClick={() => setIsOpen(!isOpen)}
+          className="lg:hidden p-2 text-gray-900 hover:text-blue-600 rounded-lg"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </motion.button>
+      </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="lg:hidden overflow-hidden bg-white/90 backdrop-blur-sm border-b-[0.5px] border-blue-950"
+          >
+            <div className="pt-4 pb-6 space-y-4">
+              {links.map((link) => (
+                <div key={link.name} className="px-4">
+                  <Link
+                    href={link.href}
+                    className="block py-2 text-gray-800 hover:text-blue-600"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <motion.span
+                      whileHover={{ x: 5 }}
+                      className="flex items-center gap-2"
                     >
                       {link.name}
-                    </Link>
-                    {link.subLinks?.map((subLink) => (
-                      <Link
-                        key={subLink.name}
-                        href={subLink.href}
-                        className="block py-2 pl-6 text-gray-500 hover:text-blue-600"
-                        onClick={() => setIsOpen(false)}
+                    </motion.span>
+                  </Link>
+                  {link.subLinks?.map((subLink) => (
+                    <Link
+                      key={subLink.name}
+                      href={subLink.href}
+                      className="block py-2 pl-6 text-gray-600 hover:text-blue-600"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <motion.span
+                        whileHover={{ x: 5 }}
+                        className="flex items-center gap-2"
                       >
+                        <ArrowRight className="w-4 h-4 text-cyan-500" />
                         {subLink.name}
-                      </Link>
-                    ))}
-                  </div>
-                ))}
-                <div className="px-4 pt-4 border-t border-gray-100 space-y-2">
-                  <Link
-                    href="/register-hospital"
-                    className="block w-full text-center py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Register Hospital
-                  </Link>
-                  <Link
-                    href="/patient-login"
-                    className="block w-full text-center py-2 bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-lg"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Patient Login
-                  </Link>
+                      </motion.span>
+                    </Link>
+                  ))}
                 </div>
+              ))}
+              <div className="px-4 pt-4 border-t-[0.5px] border-blue-950 space-y-2">
+                <Link
+                  href="/register-hospital"
+                  className="block w-full text-center py-2 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-lg hover:shadow-md transition-shadow"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Register Hospital
+                </Link>
+                <Link
+                  href="/patient-login"
+                  className="block w-full text-center py-2 bg-white/80 text-gray-800 hover:bg-white rounded-lg transition-colors"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Patient Login
+                </Link>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
   );
 }

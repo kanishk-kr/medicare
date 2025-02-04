@@ -1,28 +1,24 @@
-// app/(landing)/page.tsx
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-
 import { 
   Building2, 
   User, 
   ArrowRight, 
   Bed, 
-  
   Stethoscope, 
   Ambulance, 
   HeartPulse, 
   Check, 
   Shield, 
-  
   Calendar,
   Activity,
   Clipboard
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
-import LandingSection from '@/components/LandingSection';
+
 export default function LandingPage() {
   const [showOptions, setShowOptions] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -42,251 +38,253 @@ export default function LandingPage() {
     <div className="bg-white">
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center pt-32 pb-20 px-4 overflow-hidden bg-gradient-to-b from-blue-50 to-white">
-        <div className="container mx-auto text-center">
+      {/* Hero Section with Three Column Layout */}
+      <section className="relative min-h-screen flex items-center pt-32 pb-20 px-4 overflow-hidden">
+  <div className="absolute inset-0 z-0">
+    <video
+      autoPlay
+      loop
+      muted
+      playsInline
+      className="w-full h-full object-cover"
+    >
+      <source
+        src="https://cdn.pixabay.com/video/2022/09/08/130591-747868243_large.mp4"
+        type="video/mp4"
+      />
+    </video>
+  </div>
+
+  <div className="container mx-auto relative z-10 grid grid-cols-3">
+    {/* Left Column - Stats Cards */}
+    <motion.div
+      className="col-span-1"
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: 0.5 }}
+    >
+      <div className="grid grid-cols-1 gap-8">
+        {/* Available Beds: reduce to 60% width (40% smaller) */}
+        <div style={{ width: '60%' }} className="ml-0">
+          <StatCard
+            icon={<Bed className="w-8 h-8 text-blue-600" />}
+            value="2,345+"
+            label="Available Beds"
+          />
+        </div>
+        {/* Medical Experts: reduce to 70% width (30% smaller) */}
+        <div style={{ width: '70%' }} className="ml-0">
+          <StatCard
+            icon={<Stethoscope className="w-8 h-8 text-cyan-600" />}
+            value="850+"
+            label="Medical Experts"
+          />
+        </div>
+        {/* Active Ambulances: reduce to 80% width (20% smaller) */}
+        <div style={{ width: '80%' }} className="ml-0">
+          <StatCard
+            icon={<Ambulance className="w-8 h-8 text-green-600" />}
+            value="112"
+            label="Active Ambulances"
+          />
+        </div>
+      </div>
+    </motion.div>
+
+    {/* Right Column - Main Content */}
+    <motion.div
+      className="col-span-1 col-start-3 text-right"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+    >
+      <h1 className="text-6xl pb-3 md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-700 to-cyan-600 bg-clip-text text-transparent">
+        Modern Healthcare Management
+      </h1>
+      <p className="text-lg md:text-xl text-gray-700 mb-8 font-medium max-w-2xl ml-auto">
+        Transform healthcare delivery with real-time resource tracking and intelligent patient coordination
+      </p>
+
+      <div className="relative inline-block">
+        <div className="flex flex-col items-end gap-4 min-h-[56px]">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col md:flex-row gap-4"
           >
-            <h1 className="text-6xl pb-3  md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Modern Healthcare Management
-            </h1>
-            <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-              Transform healthcare delivery with real-time resource tracking and intelligent patient coordination
-            </p>
+            <motion.div
+              initial={{ x: -20 }}
+              animate={{ x: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              <Link
+                href="/auth/hospital/register"
+                className="flex items-center gap-3 px-6 py-4 bg-white border-2 border-blue-100 rounded-xl hover:border-blue-200 hover:shadow-lg transition-all"
+              >
+                <Building2 className="w-6 h-6 text-blue-600" />
+                <span className="text-gray-900 font-medium">Register Hospital</span>
+                <ArrowRight className="w-5 h-5 ml-2 text-blue-600" />
+              </Link>
+            </motion.div>
 
-            <div className="relative inline-block" ref={containerRef}>
-              <div className="flex flex-col items-center gap-4 min-h-[56px]">
-                <AnimatePresence mode='wait'>
-                  {!showOptions ? (
-                    <motion.button
-                      key="main-button"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      exit={{ scale: 0 }}
-                      whileHover={{ scale: 1.05 }}
-                      onClick={() => setShowOptions(true)}
-                      className="bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-4 rounded-full font-semibold text-white"
-                    >
-                      Get Started
-                    </motion.button>
-                  ) : (
-                    <motion.div
-                      key="options"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      className="flex flex-col md:flex-row gap-4"
-                    >
-                      <motion.div
-                        initial={{ x: -20 }}
-                        animate={{ x: 0 }}
-                        transition={{ delay: 0.1 }}
-                      >
-                        <Link
-                          href="/auth/hospital/register"
-                          className="flex items-center gap-3 px-6 py-4 bg-white border-2 border-blue-100 rounded-xl hover:border-blue-200 hover:shadow-lg transition-all"
-                        >
-                          <Building2 className="w-6 h-6 text-blue-600" />
-                          <span className="text-gray-900 font-medium">Register Hospital</span>
-                          <ArrowRight className="w-5 h-5 ml-2 text-blue-600" />
-                        </Link>
-                      </motion.div>
-
-                      <motion.div
-                        initial={{ x: 20 }}
-                        animate={{ x: 0 }}
-                        transition={{ delay: 0.2 }}
-                      >
-                        <Link
-                          href="/auth/patient/login"
-                          className="flex items-center gap-3 px-6 py-4 bg-white border-2 border-blue-100 rounded-xl hover:border-blue-200 hover:shadow-lg transition-all"
-                        >
-                          <User className="w-6 h-6 text-purple-600" />
-                          <span className="text-gray-900 font-medium">Patient Login</span>
-                          <ArrowRight className="w-5 h-5 ml-2 text-purple-600" />
-                        </Link>
-                      </motion.div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Stats Grid */}
-          <motion.div 
-            className="mt-20 mx-auto max-w-6xl relative"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.5 }}
-          >
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <StatCard 
-                icon={<Bed className="w-8 h-8 text-blue-600" />}
-                value="2,345+"
-                label="Available Beds"
-              />
-              <StatCard 
-                icon={<Stethoscope className="w-8 h-8 text-purple-600" />}
-                value="850+"
-                label="Medical Experts"
-              />
-              <StatCard 
-                icon={<Ambulance className="w-8 h-8 text-green-600" />}
-                value="112"
-                label="Active Ambulances"
-              />
-            </div>
+            <motion.div
+              initial={{ x: 20 }}
+              animate={{ x: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <Link
+                href="/auth/patient/login"
+                className="flex items-center gap-3 px-6 py-4 bg-white border-2 border-blue-100 rounded-xl hover:border-blue-200 hover:shadow-lg transition-all"
+              >
+                <User className="w-6 h-6 text-cyan-600" />
+                <span className="text-gray-900 font-medium">Patient Login</span>
+                <ArrowRight className="w-5 h-5 ml-2 text-cyan-600" />
+              </Link>
+            </motion.div>
           </motion.div>
         </div>
-      </section>
-
-      <section className="py-20 px-4 bg-gradient-to-b from-blue-50 to-purple-50">
-  <div className="container mx-auto max-w-7xl">
-    <motion.div 
-      className="text-center mb-16"
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-    >
-      <h2 className="text-4xl font-bold text-gray-900 mb-4">
-        Comprehensive Healthcare Platform
-      </h2>
-      <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-        Transform healthcare delivery with our modular solution stack
-      </p>
+      </div>
     </motion.div>
-
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 auto-rows-[minmax(300px,auto)]">
-      {/* Main Feature Card (Large) */}
-      <motion.div
-        className="md:col-span-2 md:row-span-2 relative group p-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl text-white overflow-hidden shadow-xl"
-        whileHover={{ scale: 1.02 }}
-      >
-        <div className="relative z-10">
-          <div className="mb-6 p-3 w-fit rounded-lg bg-white/10 backdrop-blur-sm">
-            <Activity className="w-8 h-8" />
-          </div>
-          <h3 className="text-2xl font-bold mb-4">Real-time Operations Dashboard</h3>
-          <p className="text-lg mb-6 opacity-90">
-            Centralized monitoring of all hospital resources with AI-powered insights
-          </p>
-          <ul className="space-y-3 mb-8">
-            <li className="flex items-center gap-2">
-              <Check className="w-5 h-5 text-green-400" />
-              Live bed availability tracking
-            </li>
-            <li className="flex items-center gap-2">
-              <Check className="w-5 h-5 text-green-400" />
-              Emergency resource alerts
-            </li>
-            <li className="flex items-center gap-2">
-              <Check className="w-5 h-5 text-green-400" />
-              Staff allocation heatmaps
-            </li>
-          </ul>
-          <div className="flex items-center gap-2 font-medium">
-            <span>Explore Dashboard</span>
-            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-          </div>
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 backdrop-blur-sm" />
-      </motion.div>
-
-      {/* Vertical Card */}
-      <motion.div
-        className="md:row-span-2 bg-white rounded-2xl border-2 border-gray-100 p-8 hover:border-blue-200 hover:shadow-lg transition-all shadow-sm"
-        whileHover={{ y: -5 }}
-      >
-        <div className="h-full flex flex-col">
-          <div className="mb-6 p-3 w-fit rounded-lg bg-blue-50 text-blue-600">
-            <Clipboard className="w-8 h-8" />
-          </div>
-          <h3 className="text-2xl font-bold text-gray-900 mb-4">Digital Health Records</h3>
-          <p className="text-gray-600 mb-6 flex-1">
-            Secure, interoperable EHR system with patient-controlled access
-          </p>
-          <div className="space-y-4">
-            <div className="flex items-center gap-3 p-4 bg-blue-50 rounded-lg">
-              <Shield className="w-6 h-6 text-blue-600" />
-              <span className="text-blue-600">HIPAA Compliant</span>
-            </div>
-            <div className="flex items-center gap-3 p-4 bg-purple-50 rounded-lg">
-              <User className="w-6 h-6 text-purple-600" />
-              <span className="text-purple-600">Patient Portal Integration</span>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Wide Card */}
-      <motion.div
-        className="md:col-span-2 bg-white rounded-2xl border-2 border-gray-100 p-8 hover:border-blue-200 hover:shadow-lg transition-all shadow-sm"
-        whileHover={{ y: -5 }}
-      >
-        <div className="flex flex-col md:flex-row gap-8">
-          <div className="flex-1">
-            <div className="mb-6 p-3 w-fit rounded-lg bg-purple-50 text-purple-600">
-              <Stethoscope className="w-8 h-8" />
-            </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Telemedicine Suite</h3>
-            <p className="text-gray-600 mb-6">
-              Virtual care platform with integrated diagnostics and prescription management
-            </p>
-          </div>
-          <div className="flex-1 bg-gradient-to-br from-purple-50 to-blue-50 rounded-lg p-6">
-            <div className="space-y-4">
-              <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-100">
-                <h4 className="font-semibold mb-2">Video Consultations</h4>
-                <p className="text-sm text-gray-600">Secure HD video conferencing</p>
-              </div>
-              <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-100">
-                <h4 className="font-semibold mb-2">AI Diagnostics</h4>
-                <p className="text-sm text-gray-600">Symptom analysis and triage</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Standard Cards */}
-      <FeatureCard
-        icon={<Ambulance className="w-8 h-8" />}
-        title="Emergency Response"
-        description="Integrated emergency dispatch system with live tracking"
-        color="red"
-      />
-      
-      <FeatureCard
-        icon={<Check className="w-8 h-8" />}
-        title="Advanced Analytics"
-        description="Predictive modeling for resource optimization"
-        color="blue"
-      />
-
-      <FeatureCard
-        icon={<Calendar className="w-8 h-8" />}
-        title="Smart Scheduling"
-        description="AI-powered staff and resource allocation"
-        color="green"
-      />
-
-      {/* New Feature Card */}
-      <FeatureCard
-        icon={<HeartPulse className="w-8 h-8" />}
-        title="Patient Monitoring"
-        description="24/7 remote patient monitoring with real-time alerts"
-        color="purple"
-      />
-    </div>
   </div>
 </section>
 
+      {/* Features Section */}
+      <section className="py-20 px-4 bg-gradient-to-b from-blue-50 to-cyan-50">
+        <div className="container mx-auto max-w-7xl">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Comprehensive Healthcare Platform
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Transform healthcare delivery with our modular solution stack
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 auto-rows-[minmax(300px,auto)]">
+            <motion.div
+              className="md:col-span-2 md:row-span-2 relative group p-8 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-2xl text-white overflow-hidden shadow-xl"
+              whileHover={{ scale: 1.02 }}
+            >
+              <div className="relative z-10">
+                <div className="mb-6 p-3 w-fit rounded-lg bg-white/10 backdrop-blur-sm">
+                  <Activity className="w-8 h-8" />
+                </div>
+                <h3 className="text-2xl font-bold mb-4">Real-time Operations Dashboard</h3>
+                <p className="text-lg mb-6 opacity-90">
+                  Centralized monitoring of all hospital resources with AI-powered insights
+                </p>
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-center gap-2">
+                    <Check className="w-5 h-5 text-green-400" />
+                    Live bed availability tracking
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="w-5 h-5 text-green-400" />
+                    Emergency resource alerts
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="w-5 h-5 text-green-400" />
+                    Staff allocation heatmaps
+                  </li>
+                </ul>
+                <div className="flex items-center gap-2 font-medium">
+                  <span>Explore Dashboard</span>
+                  <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                </div>
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-cyan-400/20 backdrop-blur-sm" />
+            </motion.div>
+
+            <motion.div
+              className="md:row-span-2 bg-white rounded-2xl border-2 border-gray-100 p-8 hover:border-blue-200 hover:shadow-lg transition-all shadow-sm"
+              whileHover={{ y: -5 }}
+            >
+              <div className="h-full flex flex-col">
+                <div className="mb-6 p-3 w-fit rounded-lg bg-blue-50 text-blue-600">
+                  <Clipboard className="w-8 h-8" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">Digital Health Records</h3>
+                <p className="text-gray-600 mb-6 flex-1">
+                  Secure, interoperable EHR system with patient-controlled access
+                </p>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 p-4 bg-blue-50 rounded-lg">
+                    <Shield className="w-6 h-6 text-blue-600" />
+                    <span className="text-blue-600">HIPAA Compliant</span>
+                  </div>
+                  <div className="flex items-center gap-3 p-4 bg-cyan-50 rounded-lg">
+                    <User className="w-6 h-6 text-cyan-600" />
+                    <span className="text-cyan-600">Patient Portal Integration</span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              className="md:col-span-2 bg-white rounded-2xl border-2 border-gray-100 p-8 hover:border-blue-200 hover:shadow-lg transition-all shadow-sm"
+              whileHover={{ y: -5 }}
+            >
+              <div className="flex flex-col md:flex-row gap-8">
+                <div className="flex-1">
+                  <div className="mb-6 p-3 w-fit rounded-lg bg-cyan-50 text-cyan-600">
+                    <Stethoscope className="w-8 h-8" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Telemedicine Suite</h3>
+                  <p className="text-gray-600 mb-6">
+                    Virtual care platform with integrated diagnostics and prescription management
+                  </p>
+                </div>
+                <div className="flex-1 bg-gradient-to-br from-cyan-50 to-blue-50 rounded-lg p-6">
+                  <div className="space-y-4">
+                    <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-100">
+                      <h4 className="font-semibold mb-2">Video Consultations</h4>
+                      <p className="text-sm text-gray-600">Secure HD video conferencing</p>
+                    </div>
+                    <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-100">
+                      <h4 className="font-semibold mb-2">AI Diagnostics</h4>
+                      <p className="text-sm text-gray-600">Symptom analysis and triage</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            <FeatureCard
+              icon={<Ambulance className="w-8 h-8" />}
+              title="Emergency Response"
+              description="Integrated emergency dispatch system with live tracking"
+              color="red"
+            />
+            <FeatureCard
+              icon={<Check className="w-8 h-8" />}
+              title="Advanced Analytics"
+              description="Predictive modeling for resource optimization"
+              color="blue"
+            />
+            <FeatureCard
+              icon={<Calendar className="w-8 h-8" />}
+              title="Smart Scheduling"
+              description="AI-powered staff and resource allocation"
+              color="green"
+            />
+            <FeatureCard
+              icon={<HeartPulse className="w-8 h-8" />}
+              title="Patient Monitoring"
+              description="24/7 remote patient monitoring with real-time alerts"
+              color="cyan"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-50 to-purple-50">
+      <section className="py-20 bg-gradient-to-r from-blue-50 to-cyan-50">
         <div className="container mx-auto text-center">
           <motion.div 
             className="max-w-3xl mx-auto"
@@ -318,20 +316,18 @@ export default function LandingPage() {
             </div>
           </motion.div>
         </div>
-        {/* <LandingSection /> */}
       </section>
     </div>
   );
 }
 
-// Stat Card Component
 const StatCard = ({ icon, value, label }: { 
   icon: React.ReactNode;
   value: string;
   label: string;
 }) => (
   <motion.div 
-    className="p-8 bg-white rounded-xl border border-gray-200 hover:border-blue-200 hover:shadow-md transition-all"
+    className="p-6 bg-white rounded-xl border border-gray-200 hover:border-blue-200 hover:shadow-md transition-all"
     whileHover={{ y: -5 }}
   >
     <div className="flex items-center gap-4">
@@ -339,20 +335,18 @@ const StatCard = ({ icon, value, label }: {
         {icon}
       </div>
       <div className="text-left">
-        <div className="text-3xl font-bold text-gray-900">{value}</div>
-        <div className="text-gray-600">{label}</div>
+        <div className="text-2xl font-bold text-gray-900">{value}</div>
+        <div className="text-gray-600 text-sm">{label}</div>
       </div>
     </div>
   </motion.div>
 );
 
-
-// Updated FeatureCard component with enhanced contrast
 const FeatureCard = ({ icon, title, description, color = 'blue' }: { 
   icon: React.ReactNode;
   title: string;
   description: string;
-  color?: 'blue' | 'green' | 'red' | 'purple';
+  color?: 'blue' | 'green' | 'red' | 'cyan';
 }) => {
   const colors = {
     blue: { 
@@ -370,10 +364,10 @@ const FeatureCard = ({ icon, title, description, color = 'blue' }: {
       text: 'text-red-600',
       border: 'border-red-200'
     },
-    purple: { 
-      bg: 'bg-purple-50', 
-      text: 'text-purple-600',
-      border: 'border-purple-200'
+    cyan: { 
+      bg: 'bg-cyan-50', 
+      text: 'text-cyan-600',
+      border: 'border-cyan-200'
     }
   };
 

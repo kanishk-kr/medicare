@@ -9,14 +9,12 @@ import {
   Building2, 
   User, 
   ArrowRight, 
-  Bed, 
-  
+  Bed,
   Stethoscope, 
   Ambulance, 
   HeartPulse, 
   Check, 
   Shield, 
-  Chart, 
   Calendar,
   Activity,
   Clipboard

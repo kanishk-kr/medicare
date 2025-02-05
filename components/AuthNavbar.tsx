@@ -51,14 +51,12 @@ export default function Navbar() {
 
   return (
     <motion.nav 
-      className={`fixed top-4 inset-x-0 mx-auto z-50 max-w-5xl px-4 sm:px-6 lg:px-8 rounded-xl backdrop-blur-md transition-all border-[0.5px] border-blue-950 ${
+      className={`fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 lg:px-8 backdrop-blur-md transition-all  ${
         isScrolled 
           ? 'bg-white/95 shadow-lg'
           : 'bg-white/90'
       }`}
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, type: 'spring' }}
+      
     >
       <div className="flex items-center justify-between h-16 lg:h-20">
         {/* Logo */}
@@ -132,6 +130,8 @@ export default function Navbar() {
             ))}
           </div>
 
+          {/*
+          Uncomment below if you want the "Get Started" options.
           <div className="flex items-center gap-4 ml-6" ref={dropdownRef}>
             <div className="relative">
               <motion.button
@@ -175,6 +175,7 @@ export default function Navbar() {
               </AnimatePresence>
             </div>
           </div>
+          */}
         </div>
 
         {/* Mobile Menu Button */}
